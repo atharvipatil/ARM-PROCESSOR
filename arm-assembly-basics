@@ -1,0 +1,30 @@
+        AREA ARMex, CODE, READONLY   ; Define a code section named ARMex, marked as read-only
+        ENTRY                        ; Mark this as the entry point of the program
+
+        LDR R12, =0x40000010         ; Load address 0x40000010 into register R12 (destination memory location 1)
+        LDR R13, =0x40000050         ; Load address 0x40000050 into register R13 (destination memory location 2)
+
+        ; Initialize registers R0 to R4 with values 1 to 5
+        MOV R0, #1                   ; R0 = 1
+        MOV R1, #2                   ; R1 = 2
+        MOV R2, #3                   ; R2 = 3
+        MOV R3, #4                   ; R3 = 4
+        MOV R4, #5                   ; R4 = 5
+
+        ; Store the values of R0-R4 to memory starting at address in R12
+        STMIA R12!, {R0-R4}          ; Store multiple: R0-R4 to [R12], then increment R12 after each store
+                                     ; Memory [0x40000010] = 1, [0x40000014] = 2, ..., [0x40000020] = 5
+
+        ; Reload R12 with original address to read back the values
+        LDR R12, =0x40000010         ; Reset R12 back to 0x40000010
+
+        ; Load the stored values from memory into R5-R9
+        LDMIA R12!, {R5-R9}          ; Load multiple: Read from [R12] into R5-R9, then increment R12
+                                     ; R5 = 1, R6 = 2, ..., R9 = 5
+
+        ; Store R5-R9 into a different memory location
+        STMIA R13!, {R5-R9}          ; Store values of R5-R9 to [R13] (0x40000050 onwards)
+
+GO      B GO                         ; Infinite loop (used to stop execution or wait forever)
+
+        END                          ; End of program for the assembler
