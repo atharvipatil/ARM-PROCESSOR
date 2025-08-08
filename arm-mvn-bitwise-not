@@ -1,0 +1,21 @@
+        AREA EXP5, CODE              ; Define a code section named EXP5
+        ENTRY                        ; Entry point for execution
+
+START
+        LDR R1, Value                ; Load the value at label 'Value' into R1 → R1 = 0x37E3C123
+        MVN R1, R1                   ; Bitwise NOT R1 → R1 = ~0x37E3C123
+        LDR R0, =Result              ; Load the address of Result into R0
+        STR R1, [R0]                 ; Store the inverted value from R1 into memory at Result
+
+Repeat
+        B Repeat                     ; Infinite loop (used to halt)
+
+; Define the Value constant (placed in code section)
+Value   DCD &37E3C123                ; Define Constant Data = 0x37E3C123 (hex format)
+
+        AREA Datal, DATA, READWRITE ; Define a data section (writable memory)
+Result  DCD 0                        ; Reserve space for result (initialize to 0)
+
+        END                          ; End of file
+
+
